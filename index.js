@@ -31,4 +31,4 @@ app.listen(process.env.PORT, () => {
     swaggerDocs(app, process.env.PORT);
 });
 
-
+module.exports = app;
