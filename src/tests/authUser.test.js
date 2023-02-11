@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
 const request = require("supertest");
-const app = require("../../index");
+const app = require("../../app");
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
 require("dotenv").config();
+// jest.setTimeout(7000);
 
 let userLogin = {
     name: "Camilo",
@@ -28,14 +29,13 @@ beforeEach(async () => {
     token = response.body.token
 });
 
+
 /* Dropping the database and closing connection after each test. */
 afterEach(async () => {
     await User.deleteMany();
+    await mongoose.connection.close();
 });
 
-afterAll(async() => {
-    await mongoose.connection.close();
-})
 
 describe("POST /api/auth/new", () => {
 
