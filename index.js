@@ -1,4 +1,5 @@
 const app = require("./app");
+const { swaggerDocs } = require("./src/swaggerDocs/swagger");
 
 
 app.listen(process.env.PORT, () => {

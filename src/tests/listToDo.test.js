@@ -33,6 +33,8 @@ afterEach(async () => {
 
 describe('endpoint tests of listToDos', () => {
 
+    // Testing in endpoint /api/toDo/createToDo/
+
     it("should create a task", async () => {
         const res = await request(app).post("/api/toDo/createToDo").set('x-token', token).send({
             title: "Buscar las gemas del infinito",
@@ -43,6 +45,7 @@ describe('endpoint tests of listToDos', () => {
         expect(res.statusCode).toBe(201);
     });
 
+    // Testing in endpoint /api/toDo/getToDos/
 
     it("should get all task", async () => {
         await request(app).post("/api/toDo/createToDo").set('x-token', token).send({
@@ -57,6 +60,8 @@ describe('endpoint tests of listToDos', () => {
         expect(res.body.listToDos).toHaveLength(1);
     });
 
+    // Testing in endpoint update/api/toDo/updateToDo/
+
 
     it("should update a task", async () => {
 
@@ -68,7 +73,6 @@ describe('endpoint tests of listToDos', () => {
         });
 
         let task = await ListToDo.findOne({ title: "Buscar las gemas del infinito" });
-        // console.log(task, "hola");
         const idTask = task.id;
 
         const res = await request(app).put(`/api/toDo/updateToDo/${idTask}`).set('x-token', token).send({
@@ -77,7 +81,6 @@ describe('endpoint tests of listToDos', () => {
             start: 2,
             end: 300000
         });
-        // console.log(res.body);
         expect(res.statusCode).toBe(200);
     });
 
@@ -89,7 +92,6 @@ describe('endpoint tests of listToDos', () => {
             start: 2,
             end: 300000
         });
-        // console.log(res.body);
         expect(res.statusCode).toBe(404);
         expect(res.body.msg).toBe("The task does not exist by that id");
     });
@@ -104,7 +106,6 @@ describe('endpoint tests of listToDos', () => {
         });
 
         let task = await ListToDo.findOne({ title: "Buscar las gemas del infinito" });
-        // console.log(task, "chao");
         const idTask = task.id;
 
         const invalidToken = await createMockUser({
@@ -119,10 +120,12 @@ describe('endpoint tests of listToDos', () => {
             start: 2,
             end: 300000
         });
-        // console.log(res.body);
         expect(res.statusCode).toBe(401);
         expect(res.body.msg).toBe("You are not authorized to perform this task");
     });
+
+
+    // testing endponitn /api/toDo/deleteToDo
 
     it("should delete a task", async () => {
 
@@ -134,7 +137,6 @@ describe('endpoint tests of listToDos', () => {
         });
 
         let task = await ListToDo.findOne({ title: "Buscar las gemas del infinito" });
-        // console.log(task, "hola");
         const idTask = task.id;
 
         const res = await request(app).delete(`/api/toDo/deleteToDo/${idTask}`).set('x-token', token).send({
@@ -143,8 +145,37 @@ describe('endpoint tests of listToDos', () => {
             start: 2,
             end: 300000
         });
-        // console.log(res.body);
+        console.log(res.body);
         expect(res.statusCode).toBe(200);
+    });
+
+
+    it("should delete invalid token a task", async () => {
+
+        await request(app).post("/api/toDo/createToDo").set('x-token', token).send({
+            title: "Buscar las gemas del infinito",
+            task: "buscar la gema del poder",
+            start: 2,
+            end: 300000
+        });
+
+        let task = await ListToDo.findOne({ title: "Buscar las gemas del infinito" });
+        const idTask = task.id;
+
+        const invalidToken = await createMockUser({
+            name: "Diego",
+            email: "example5@gmail.com",
+            password: "123456"
+        })
+
+        const res = await request(app).delete(`/api/toDo/deleteToDo/${idTask}`).set('x-token', invalidToken).send({
+            title: "Buscar las esferas del dragon",
+            task: "encontrar la esfera numero 2",
+            start: 2,
+            end: 300000
+        });
+        expect(res.statusCode).toBe(401);
+        expect(res.body.msg).toBe("You are not authorized to delete this task");
     });
 
 })

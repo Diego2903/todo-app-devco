@@ -93,7 +93,7 @@ const deleteToDo = async(req, res = response) => {
         if (!task) {
             res.status(404).json({
                 ok: false,
-                msg: ' The task does not exist by that id'
+                msg: 'The task does not exist by that id'
             })
         }
 
