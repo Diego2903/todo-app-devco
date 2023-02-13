@@ -28,7 +28,7 @@ app.use(express.json());
 // Rutas
 
 app.use('/api/auth', require('./src/routes/authUser'));
-app.use('/api/toDo', require('./src/routes/listToDo'));
+app.use('/api/to-do', require('./src/routes/listToDo'));
 
 
 module.exports = app;

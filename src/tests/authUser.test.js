@@ -25,7 +25,7 @@ beforeEach(async () => {
 
     await user.save();
 
-    const response = await request(app).post("/api/auth").send(userLogin);
+    const response = await request(app).post("/api/auth/login").send(userLogin);
     token = response.body.token
 });
 
@@ -37,12 +37,12 @@ afterEach(async () => {
 });
 
 
-describe("POST /api/auth/new", () => {
+describe("POST /api/auth", () => {
 
-    // Testing in endpoint /api/authUser/new
+    // Testing in endpoint /api/auth-user/
 
     it("should create a user", async () => {
-        const res = await request(app).post("/api/auth/new").send({
+        const res = await request(app).post("/api/auth").send({
             name: "Roberto",
             email: "example4@gmail.com",
             password: "123456",
@@ -51,16 +51,16 @@ describe("POST /api/auth/new", () => {
         expect(res.body.name).toBe("Roberto");
     });
 
-    // Testing in endpoint /api/authUser/
+    // Testing in endpoint /api/auth-user/
 
     it("should login a user", async () => {
-        const res = await request(app).post("/api/auth").send(userLogin);
+        const res = await request(app).post("/api/auth/login").send(userLogin);
         expect(res.statusCode).toBe(200);
         expect(res.body.token).not.toBeNull();
     });
 
     it("login a user email incorrect", async () => {
-        const res = await request(app).post("/api/auth").send({
+        const res = await request(app).post("/api/auth/login").send({
             email: "example7@gmail.com",
             password: "123457"
         });
@@ -70,7 +70,7 @@ describe("POST /api/auth/new", () => {
     });
 
     it("login a user password incorrect", async () => {
-        const res = await request(app).post("/api/auth").send({
+        const res = await request(app).post("/api/auth/login").send({
             email: "example2@gmail.com",
             password: "123458"
         });

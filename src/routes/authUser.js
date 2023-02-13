@@ -33,7 +33,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/auth/new:
+ * /api/auth:
  *  post:
  *    summary: create a new user
  *    tags: [User]
@@ -52,7 +52,7 @@ const router = express.Router();
  *      500:
  *        description: Internal Server Error
 */
-router.post('/new',
+router.post('/',
 [
     check('name', 'the name is required').not().isEmpty(),
     check('email', 'the email is required').isEmail(),
@@ -65,7 +65,7 @@ createUser,
 
 /**
  * @swagger
- * /api/auth/:
+ * /api/auth/login:
  *  post:
  *    summary: login user
  *    tags: [User]
@@ -90,7 +90,7 @@ createUser,
  *      500:
  *        description: Internal Server Error
  */
-router.post('/',
+router.post('/login',
     [
         check('email', 'the email is required').isEmail(),
         check('password', 'password must be longer than 6 characters').isLength({ min: 6 }),

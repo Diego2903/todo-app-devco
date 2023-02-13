@@ -8,7 +8,6 @@ const router = express.Router();
 
 router.use(validateJWT);
 
-
 /**
  * @swagger
  * components:
@@ -50,7 +49,7 @@ router.use(validateJWT);
 
 /**
  * @swagger
- * /api/toDo/createToDo:
+ * /api/to-do:
  *  post:
  *    summary: create a new task
  *    tags: [ListToDo]
@@ -74,7 +73,7 @@ router.use(validateJWT);
  *      500:
  *        description: Internal Server Error
 */
-router.post('/createToDo', 
+router.post('/', 
 [
     check('title', 'the title is required').not().isEmpty(),
     check('task', 'the task is required').not().isEmpty(),
@@ -86,7 +85,7 @@ createToDo);
 
 /**
  * @swagger
- * /api/toDo/getToDos:
+ * /api/to-do:
  *  get:
  *    summary: list all task
  *    tags: [ListToDo]
@@ -105,12 +104,12 @@ createToDo);
  *    content:
  *      application/json:
 */
-router.get('/getToDos', getToDos);
+router.get('/', getToDos);
 
 
 /**
  * @swagger
- * /api/toDo/updateToDo/:id:
+ * /api/to-do/:id:
  *  put:
  *    summary: update one task
  *    tags: [ListToDo]
@@ -144,11 +143,11 @@ router.get('/getToDos', getToDos);
  *      500:
  *        description: Internal Server Error
 */
-router.put('/updateToDo/:id', updateToDo);
+router.put('/:id', updateToDo);
 
 /**
  * @swagger
- * /api/toDo/deleteToDo/:id:
+ * /api/to-do/:id:
  *  delete:
  *    summary: delete one task
  *    tags: [ListToDo]
@@ -182,7 +181,7 @@ router.put('/updateToDo/:id', updateToDo);
  *      500:
  *        description: Internal Server Error
 */
-router.delete('/deleteToDo/:id', deleteToDo);
+router.delete('/:id', deleteToDo);
 
 
 module.exports = router;
