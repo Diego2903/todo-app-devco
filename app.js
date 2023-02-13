@@ -16,9 +16,9 @@ app.use(cors());
 // Directorio publico
 app.use( express.static('./public') );
 
-app.get('/', (req, res) => {
-    res.send('Hey this is my API running 🥳')
-  })
+// app.get('/', (req, res) => {
+//     res.send('Hey this is my API running 🥳')
+// })
   
 
 // Parseo del body
