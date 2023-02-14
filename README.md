@@ -7,13 +7,13 @@ Example REST API in NodeJS, using Mongo, JWT and with CI under GitHub Actions fo
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=todo-app-devco&metric=coverage)](https://sonarcloud.io/summary/new_code?id=todo-app-devco)
 
 # Comandos
-## Instalar dependencias
+## Install dependencies
 `npm install`
-## Ejecutar el servicio
+## Run the service
 npm run dev
-## Ejecutar pruebas unitarias
+## Run unit tests
 npm run test
-## Compilar Docker
+## Build Docker
 docker build -t todo-app/node-web-app:latest .
 
 # Used technologies and libraries: A little bit of their development
