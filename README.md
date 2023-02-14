@@ -16,7 +16,7 @@ npm run test
 ## Compilar Docker
 docker build -t todo-app/node-web-app:latest .
 
-# Tecnologías y librerías usadas: Un poquito de su desarrollo
+# Used technologies and libraries: A little bit of their development
 ## NodeJS. 
 JS en Servidor.
 ## Mongo DB. 
@@ -45,6 +45,5 @@ Simplify API development for users, teams, and enterprises with the Swagger open
 Is an API platform for building and using APIs. Postman simplifies each step of the API lifecycle and streamlines collaboration so you can create better APIs—faster.
 
 # Autor
-## 
 Diego Fernando Roman Jaramillo <a href="https://www.linkedin.com/in/diego-roman-j/" target="_blank"><img align="center" src="https://cdn.jsdelivr.net/npm/simple-icons@3.1.0/icons/linkedin.svg" alt="raghav_shukl" height="25" width="25" /></a>&nbsp;&nbsp;
 
