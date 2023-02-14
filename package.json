@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./src/index.js",
     "dev": "nodemon ./src/index.js",
-    "test": "set PORT=8080 && cross-env NODE_ENV=test jest --testTimeout=20000 --coverage --watchAll --runInBand --collectCoverageFrom=src/**/*.js --collectCoverageFrom=!src/database/* "
+    "test": "set PORT=8080 && cross-env NODE_ENV=test jest --testTimeout=20000 --coverage --runInBand --collectCoverageFrom=src/**/*.js --collectCoverageFrom=!src/database/* "
   },
   "keywords": [],
   "author": "Diego Roman",
