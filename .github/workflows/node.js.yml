@@ -1,0 +1,29 @@
+name: CI todo-app
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js 
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+    - name: Node install dependencies
+      run: npm install
+    - name: Run unit tests
+      run: npm run test --watch=false --browsers=ChromeHeadless
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@v1.8
+      with:
+        args: -D sonar.organization=diego2903 -Dsonar.projectKey=todo-app-devco -Dsonar.host.url=https://sonarcloud.io  
+      env:
+        SONAR_TOKEN: ${{secrets.SONAR_TOKEN_SECRET_TODO_APP}}
