@@ -20,7 +20,7 @@ jobs:
     - name: Node install dependencies
       run: npm install
     - name: Run unit tests
-      run: npm run test
+      run: npm run test --watch=false --browsers=ChromeHeadless
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v1.8
       with:
