@@ -26,7 +26,7 @@ jobs:
       with:
         args: -Dsonar.organization=diego2903 -Dsonar.projectKey=todo-app-devco -Dsonar.host.url=https://sonarcloud.io
               -Dsonar.sources=src -Dsonar.tests=src/tests
-              -Dsonar.test.inclusions=src/*/.spec.js,src/*/.spec.jsx,src/*/.test.js,src/*/.test.jsx,src/*/.test.ts,src/*/.test.tsx
+              -Dsonar.exclusions=src/tests/**
               -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
       env:
         SONAR_TOKEN: ${{secrets.SONAR_TOKEN_SECRET_TODO_APP}}
