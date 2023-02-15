@@ -1,11 +1,10 @@
 const mongoose = require("mongoose");
-const request = require("supertest");
+const requestSupertest = require("supertest");
 const app = require("../../app");
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
 require("dotenv").config();
-// jest.setTimeout(7000);
 
 let userLogin = {
     name: "Camilo",
@@ -25,7 +24,7 @@ beforeEach(async () => {
 
     await user.save();
 
-    const response = await request(app).post("/api/auth/login").send(userLogin);
+    const response = await requestSupertest(app).post("/api/auth/login").send(userLogin);
     token = response.body.token
 });
 
@@ -42,7 +41,7 @@ describe("POST /api/auth", () => {
     // Testing in endpoint /api/auth-user/
 
     it("should create a user", async () => {
-        const res = await request(app).post("/api/auth").send({
+        const res = await requestSupertest(app).post("/api/auth").send({
             name: "Roberto",
             email: "example4@gmail.com",
             password: "123456",
@@ -53,13 +52,13 @@ describe("POST /api/auth", () => {
 
     
     it("should create a user repeat email", async () => {
-        await request(app).post("/api/auth").send({
+        await requestSupertest(app).post("/api/auth").send({
             name: "Roberto",
             email: "example4@gmail.com",
             password: "123456",
         });
 
-        const res = await request(app).post("/api/auth").send({
+        const res = await requestSupertest(app).post("/api/auth").send({
             name: "Roberto",
             email: "example4@gmail.com",
             password: "123456",
@@ -71,13 +70,13 @@ describe("POST /api/auth", () => {
     // Testing in endpoint /api/auth-user/
 
     it("should login a user", async () => {
-        const res = await request(app).post("/api/auth/login").send(userLogin);
+        const res = await requestSupertest(app).post("/api/auth/login").send(userLogin);
         expect(res.statusCode).toBe(200);
         expect(res.body.token).not.toBeNull();
     });
 
     it("login a user email incorrect", async () => {
-        const res = await request(app).post("/api/auth/login").send({
+        const res = await requestSupertest(app).post("/api/auth/login").send({
             email: "example7@gmail.com",
             password: "123457"
         });
@@ -87,7 +86,7 @@ describe("POST /api/auth", () => {
     });
 
     it("login a user password incorrect", async () => {
-        const res = await request(app).post("/api/auth/login").send({
+        const res = await requestSupertest(app).post("/api/auth/login").send({
             email: "example2@gmail.com",
             password: "123458"
         });
@@ -102,7 +101,7 @@ describe("POST /api/auth", () => {
 
         let user = await User.findOne({ email: userLogin.email });
 
-        const res = await request(app).get("/api/auth/renew").set("x-token", token).send({
+        const res = await requestSupertest(app).get("/api/auth/renew").set("x-token", token).send({
             name: userLogin.name,
             uid: user.uid
         });
