@@ -1,16 +1,7 @@
 const mongoose = require("mongoose");
-const requestSupertest = require("supertest");
-const app = require("../../app");
-const User = require('../models/User');
-const bcrypt = require('bcryptjs');
+const { userLogin, User, app, bcrypt, requestSupertest, emailIncorrect, passwordIncorrect } = require("./helpers");
 
 require("dotenv").config();
-
-let userLogin = {
-    name: "Camilo",
-    email: "example2@gmail.com",
-    password: "123456"
-}
 
 let token = "";
 
@@ -52,17 +43,9 @@ describe("POST /api/auth", () => {
 
     
     it("should create a user repeat email", async () => {
-        await requestSupertest(app).post("/api/auth").send({
-            name: "Roberto",
-            email: "example4@gmail.com",
-            password: "123456",
-        });
+        await requestSupertest(app).post("/api/auth").send(userLogin);
 
-        const res = await requestSupertest(app).post("/api/auth").send({
-            name: "Roberto",
-            email: "example4@gmail.com",
-            password: "123456",
-        });
+        const res = await requestSupertest(app).post("/api/auth").send(userLogin);
         expect(res.statusCode).toBe(400);
         expect(res.body.msg).toBe("There is already a user with that email");
     });
@@ -76,20 +59,14 @@ describe("POST /api/auth", () => {
     });
 
     it("login a user email incorrect", async () => {
-        const res = await requestSupertest(app).post("/api/auth/login").send({
-            email: "example7@gmail.com",
-            password: "123457"
-        });
+        const res = await requestSupertest(app).post("/api/auth/login").send(emailIncorrect);
         expect(res.statusCode).toBe(400);
         expect(res.body.msg).toBe("the user does not exist with that email");
         expect(res.body.token).not.toBeNull();
     });
 
     it("login a user password incorrect", async () => {
-        const res = await requestSupertest(app).post("/api/auth/login").send({
-            email: "example2@gmail.com",
-            password: "123458"
-        });
+        const res = await requestSupertest(app).post("/api/auth/login").send(passwordIncorrect);
         expect(res.statusCode).toBe(400);
         expect(res.body.msg).toBe("Password incorrect");
         expect(res.body.token).not.toBeNull();
@@ -98,7 +75,6 @@ describe("POST /api/auth", () => {
     // Testing in endpoint /api/authUser/renew
 
     it("should renew token", async () => {
-
         let user = await User.findOne({ email: userLogin.email });
 
         const res = await requestSupertest(app).get("/api/auth/renew").set("x-token", token).send({

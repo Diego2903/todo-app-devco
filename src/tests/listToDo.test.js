@@ -1,18 +1,7 @@
 const mongoose = require("mongoose");
-const requestSupertest = require("supertest");
-const app = require("../../app");
-const ListToDo = require("../models/ListToDo");
-const User = require("../models/User");
-const bcrypt = require('bcryptjs');
-
+const { User, requestSupertest, userLogin, app, createTask, createMockUser, ListToDo } = require("./helpers");
 
 require("dotenv").config();
-
-let userLogin = {
-    name: "Camilo",
-    email: "example3@gmail.com",
-    password: "123456"
-}
 
 let token = "";
 
@@ -35,24 +24,14 @@ describe('endpoint tests of listToDos', () => {
     // Testing in endpoint /api/to-do
 
     it("should create a task", async () => {
-        const res = await requestSupertest(app).post("/api/to-do").set('x-token', token).send({
-            title: "Buscar las gemas del infinito",
-            task: "buscar la gema del poder",
-            start: 2,
-            end: 300000
-        });
+        const res = await requestSupertest(app).post("/api/to-do").set('x-token', token).send(createTask);
         expect(res.statusCode).toBe(201);
     });
 
     // Testing in endpoint /api/toDo/getToDos/
 
     it("should get all task", async () => {
-        await requestSupertest(app).post("/api/to-do").set('x-token', token).send({
-            title: "Buscar las esferas del dragon",
-            task: "buscar la esfera numero 4",
-            start: 1,
-            end: 400000
-        });
+        await requestSupertest(app).post("/api/to-do").set('x-token', token).send(createTask);
         const res = await requestSupertest(app).get("/api/to-do").set('x-token', token);
         expect(res.statusCode).toBe(200);
         expect(Array.isArray(res.body.listToDos)).toBe(true);
@@ -64,14 +43,9 @@ describe('endpoint tests of listToDos', () => {
 
     it("should update a task", async () => {
 
-        await requestSupertest(app).post("/api/to-do").set('x-token', token).send({
-            title: "Realizar tareas de la casa",
-            task: "Barrer el cuarto",
-            start: 2,
-            end: 300000
-        });
+        await requestSupertest(app).post("/api/to-do").set('x-token', token).send(createTask);
 
-        let task = await ListToDo.findOne({ title: "Realizar tareas de la casa" });
+        let task = await ListToDo.findOne({ title: "Buscar las gemas del infinito" });
         const idTask = task.id;
 
         const res = await requestSupertest(app).put(`/api/to-do/${idTask}`).set('x-token', token).send({
@@ -86,24 +60,14 @@ describe('endpoint tests of listToDos', () => {
 
     it("should update invalid id a task", async () => {
 
-        const res = await requestSupertest(app).put(`/api/to-do/63e6d82a54f5146570711b93`).set('x-token', token).send({
-            title: "Buscar las esferas del dragon",
-            task: "encontrar la esfera numero 2",
-            start: 2,
-            end: 300000
-        });
+        const res = await requestSupertest(app).put(`/api/to-do/63e6d82a54f5146570711b93`).set('x-token', token).send(createTask);
         expect(res.statusCode).toBe(404);
         expect(res.body.msg).toBe("The task does not exist by that id");
     });
 
     it("should update invalid token a task", async () => {
 
-        await requestSupertest(app).post("/api/to-do").set('x-token', token).send({
-            title: "Buscar las gemas del infinito",
-            task: "buscar la gema de la destruccion",
-            start: 2,
-            end: 300000
-        });
+        await requestSupertest(app).post("/api/to-do").set('x-token', token).send(createTask);
 
         let task = await ListToDo.findOne({ title: "Buscar las gemas del infinito" });
         const idTask = task.id;
@@ -129,14 +93,9 @@ describe('endpoint tests of listToDos', () => {
 
     it("should delete a task", async () => {
 
-        await requestSupertest(app).post("/api/to-do").set('x-token', token).send({
-            title: "Buscar curso para estudiar nextJs",
-            task: "Encontrar un buen curso",
-            start: 2,
-            end: 300000
-        });
+        await requestSupertest(app).post("/api/to-do").set('x-token', token).send(createTask);
 
-        let task = await ListToDo.findOne({ title: "Buscar curso para estudiar nextJs" });
+        let task = await ListToDo.findOne({ title: "Buscar las gemas del infinito" });
         const idTask = task.id;
 
         const res = await requestSupertest(app).delete(`/api/to-do/${idTask}`).set('x-token', token).send();
@@ -153,14 +112,9 @@ describe('endpoint tests of listToDos', () => {
 
     it("should delete invalid token a task", async () => {
 
-        await requestSupertest(app).post("/api/to-do").set('x-token', token).send({
-            title: "Planes diarios de la semana",
-            task: "Ir al gimnasio",
-            start: 2,
-            end: 300000
-        });
+        await requestSupertest(app).post("/api/to-do").set('x-token', token).send(createTask);
 
-        let task = await ListToDo.findOne({ title: "Planes diarios de la semana" });
+        let task = await ListToDo.findOne({ title: "Buscar las gemas del infinito" });
         const idTask = task.id;
 
         const invalidToken = await createMockUser({
@@ -176,14 +130,3 @@ describe('endpoint tests of listToDos', () => {
 
 })
 
-const createMockUser = async (userToCreate) => {
-
-    const user = new User(userToCreate);
-    const salt = bcrypt.genSaltSync();
-
-    user.password = bcrypt.hashSync(user.password, salt);
-
-    await user.save();
-    const response = await requestSupertest(app).post("/api/auth/login").send(userToCreate);
-    return response.body.token
-}
