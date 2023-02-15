@@ -84,6 +84,7 @@ describe('endpoint tests of listToDos', () => {
         expect(res.statusCode).toBe(200);
     });
 
+
     it("should update invalid id a task", async () => {
 
         const res = await request(app).put(`/api/to-do/63e6d82a54f5146570711b93`).set('x-token', token).send({
@@ -139,16 +140,40 @@ describe('endpoint tests of listToDos', () => {
         let task = await ListToDo.findOne({ title: "Buscar las gemas del infinito" });
         const idTask = task.id;
 
-        const res = await request(app).delete(`/api/to-do/${idTask}`).set('x-token', token).send({
-            title: "Buscar las gemas del infinito",
-            task: "buscar la gema del poder",
-            start: 2,
-            end: 300000
-        });
+        const res = await request(app).delete(`/api/to-do/${idTask}`).set('x-token', token).send();
         console.log(res.body);
         expect(res.statusCode).toBe(200);
     });
 
+
+    it("should delete invalid id a task", async () => {
+
+        await request(app).post("/api/auth").send({
+            name: "Roberto",
+            email: "example4@gmail.com",
+            password: "123456",
+        });
+
+        await request(app).post("/api/auth/login").send({
+            email: "example4@gmail.com",
+            password: "123456",
+        });
+
+        await request(app).post("/api/to-do").set('x-token', token).send({
+            title: "Buscar las gemas del infinito",
+            task: "buscar la gema del alma",
+            start: 2,
+            end: 300000
+        });
+
+        let task = await ListToDo.findOne({ title: "Buscar las gemas del infinito" });
+        const idTask = task.id;
+        console.log(idTask);
+
+        const res = await request(app).delete(`/api/to-do/63ec27b04f91d4f8fa0016a0`).set('x-token', token).send();
+        expect(res.statusCode).toBe(404);
+        expect(res.body.msg).toBe("The task does not exist by that id");    
+    });
 
     it("should delete invalid token a task", async () => {
 
@@ -168,12 +193,7 @@ describe('endpoint tests of listToDos', () => {
             password: "123456"
         })
 
-        const res = await request(app).delete(`/api/to-do/${idTask}`).set('x-token', invalidToken).send({
-            title: "Buscar las esferas del dragon",
-            task: "encontrar la esfera numero 2",
-            start: 2,
-            end: 300000
-        });
+        const res = await request(app).delete(`/api/to-do/${idTask}`).set('x-token', invalidToken).send();
         expect(res.statusCode).toBe(401);
         expect(res.body.msg).toBe("You are not authorized to delete this task");
     });

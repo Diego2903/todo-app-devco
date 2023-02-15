@@ -51,6 +51,23 @@ describe("POST /api/auth", () => {
         expect(res.body.name).toBe("Roberto");
     });
 
+    
+    it("should create a user repeat email", async () => {
+        await request(app).post("/api/auth").send({
+            name: "Roberto",
+            email: "example4@gmail.com",
+            password: "123456",
+        });
+
+        const res = await request(app).post("/api/auth").send({
+            name: "Roberto",
+            email: "example4@gmail.com",
+            password: "123456",
+        });
+        expect(res.statusCode).toBe(400);
+        expect(res.body.msg).toBe("There is already a user with that email");
+    });
+
     // Testing in endpoint /api/auth-user/
 
     it("should login a user", async () => {

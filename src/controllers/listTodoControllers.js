@@ -91,7 +91,7 @@ const deleteToDo = async(req, res = response) => {
         const task = await ListToDo.findById(taskId);
 
         if (!task) {
-            res.status(404).json({
+            return res.status(404).json({
                 ok: false,
                 msg: 'The task does not exist by that id'
             })
