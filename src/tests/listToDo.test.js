@@ -7,7 +7,6 @@ const bcrypt = require('bcryptjs');
 
 
 require("dotenv").config();
-// jest.setTimeout(7000);
 
 let userLogin = {
     name: "Camilo",
@@ -141,34 +140,11 @@ describe('endpoint tests of listToDos', () => {
         const idTask = task.id;
 
         const res = await request(app).delete(`/api/to-do/${idTask}`).set('x-token', token).send();
-        console.log(res.body);
         expect(res.statusCode).toBe(200);
     });
 
 
     it("should delete invalid id a task", async () => {
-
-        await request(app).post("/api/auth").send({
-            name: "Roberto",
-            email: "example4@gmail.com",
-            password: "123456",
-        });
-
-        await request(app).post("/api/auth/login").send({
-            email: "example4@gmail.com",
-            password: "123456",
-        });
-
-        await request(app).post("/api/to-do").set('x-token', token).send({
-            title: "Buscar las gemas del infinito",
-            task: "buscar la gema del alma",
-            start: 2,
-            end: 300000
-        });
-
-        let task = await ListToDo.findOne({ title: "Buscar las gemas del infinito" });
-        const idTask = task.id;
-        console.log(idTask);
 
         const res = await request(app).delete(`/api/to-do/63ec27b04f91d4f8fa0016a0`).set('x-token', token).send();
         expect(res.statusCode).toBe(404);
