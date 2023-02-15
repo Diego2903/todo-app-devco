@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { User, requestSupertest, userLogin, app, createTask, createMockUser, ListToDo } = require("./helpers");
+const { User, requestSupertest, userLogin, app, createTask, createMockUser, ListToDo, updateTask, differentUser } = require("./helpers");
 
 require("dotenv").config();
 
@@ -48,12 +48,7 @@ describe('endpoint tests of listToDos', () => {
         let task = await ListToDo.findOne({ title: "Buscar las gemas del infinito" });
         const idTask = task.id;
 
-        const res = await requestSupertest(app).put(`/api/to-do/${idTask}`).set('x-token', token).send({
-            title: "Realizar tareas de la casa",
-            task: "Trapear toda la casa",
-            start: 2,
-            end: 300000
-        });
+        const res = await requestSupertest(app).put(`/api/to-do/${idTask}`).set('x-token', token).send(updateTask);
         expect(res.statusCode).toBe(200);
     });
 
@@ -72,18 +67,9 @@ describe('endpoint tests of listToDos', () => {
         let task = await ListToDo.findOne({ title: "Buscar las gemas del infinito" });
         const idTask = task.id;
 
-        const invalidToken = await createMockUser({
-            name: "Danilo",
-            email: "example4@gmail.com",
-            password: "123456"
-        })
+        const invalidToken = await createMockUser(differentUser)
 
-        const res = await requestSupertest(app).put(`/api/to-do/${idTask}`).set('x-token', invalidToken).send({
-            title: "Buscar las esferas del dragon",
-            task: "encontrar la esfera numero 2",
-            start: 2,
-            end: 300000
-        });
+        const res = await requestSupertest(app).put(`/api/to-do/${idTask}`).set('x-token', invalidToken).send(updateTask);
         expect(res.statusCode).toBe(401);
         expect(res.body.msg).toBe("You are not authorized to perform this task");
     });
@@ -117,11 +103,7 @@ describe('endpoint tests of listToDos', () => {
         let task = await ListToDo.findOne({ title: "Buscar las gemas del infinito" });
         const idTask = task.id;
 
-        const invalidToken = await createMockUser({
-            name: "Diego",
-            email: "example5@gmail.com",
-            password: "123456"
-        })
+        const invalidToken = await createMockUser(differentUser)
 
         const res = await requestSupertest(app).delete(`/api/to-do/${idTask}`).set('x-token', invalidToken).send();
         expect(res.statusCode).toBe(401);

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { userLogin, User, app, bcrypt, requestSupertest, emailIncorrect, passwordIncorrect } = require("./helpers");
+const { userLogin, User, app, bcrypt, requestSupertest, emailIncorrect, passwordIncorrect, differentUser } = require("./helpers");
 
 require("dotenv").config();
 
@@ -32,13 +32,9 @@ describe("POST /api/auth", () => {
     // Testing in endpoint /api/auth-user/
 
     it("should create a user", async () => {
-        const res = await requestSupertest(app).post("/api/auth").send({
-            name: "Roberto",
-            email: "example4@gmail.com",
-            password: "123456",
-        });
+        const res = await requestSupertest(app).post("/api/auth").send(differentUser);
         expect(res.statusCode).toBe(201);
-        expect(res.body.name).toBe("Roberto");
+        expect(res.body.name).toBe("Danilo");
     });
 
     

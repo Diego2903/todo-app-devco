@@ -11,6 +11,11 @@ let userLogin = {
     email: "example2@gmail.com",
     password: "123456"
 }
+let differentUser = {
+    name: "Danilo",
+    email: "example3@gmail.com",
+    password: "123456"
+}
 
 let emailIncorrect = {
     email: "example7@gmail.com",
@@ -29,6 +34,13 @@ let createTask = {
     end: 300000
 }
 
+let updateTask = {
+    title: "Realizar tareas de la casa",
+    task: "Trapear toda la casa",
+    start: 2,
+    end: 300000
+}
+
 const createMockUser = async (userToCreate) => {
 
     const user = new User(userToCreate);
@@ -42,7 +54,6 @@ const createMockUser = async (userToCreate) => {
 }
 
 
-
 module.exports = {
     userLogin,
     requestSupertest,
@@ -51,6 +62,8 @@ module.exports = {
     emailIncorrect,
     passwordIncorrect,
     createTask,
+    updateTask,
+    differentUser,
     User,
     ListToDo,
     createMockUser
