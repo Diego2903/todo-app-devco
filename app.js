@@ -22,6 +22,7 @@ app.use(express.json());
 
 // Rutas
 
+swaggerDocs(app, process.env.PORT);
 app.use('/api/auth', require('./src/routes/authUser'));
 app.use('/api/to-do', require('./src/routes/listToDo'));
 
