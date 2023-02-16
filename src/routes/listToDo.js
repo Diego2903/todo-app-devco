@@ -109,7 +109,7 @@ router.get('/', getToDos);
 
 /**
  * @swagger
- * /api/to-do/:id:
+ * /api/to-do/{id}:
  *  put:
  *    summary: update one task
  *    tags: [ListToDo]
@@ -128,7 +128,7 @@ router.get('/', getToDos);
  *        required: true
  *        description: the token validate
  *      - in: path
- *        name: id-task
+ *        name: id
  *        schema:
  *          type: string
  *        required: true
@@ -147,17 +147,10 @@ router.put('/:id', updateToDo);
 
 /**
  * @swagger
- * /api/to-do/:id:
+ * /api/to-do/{id}:
  *  delete:
  *    summary: delete one task
  *    tags: [ListToDo]
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            type: object
- *            $ref: '#/components/schemas/ListToDo'
  *    parameters:
  *      - in: header
  *        name: x-token
@@ -166,7 +159,7 @@ router.put('/:id', updateToDo);
  *        required: true
  *        description: the token validate
  *      - in: path
- *        name: id-task
+ *        name: id
  *        schema:
  *          type: string
  *        required: true

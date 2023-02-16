@@ -40,6 +40,7 @@ const createToDo = async (req, res = response) => {
 const updateToDo = async(req, res = response) => {
 
     const taskId = req.params.id;
+    console.error(taskId);
     const uid = req.uid;
 
     try {
